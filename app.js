@@ -4,8 +4,8 @@ const summary = document.querySelector('#summary');
 const template = document.querySelector('#trackTemplate');
 const settingsStatus = document.querySelector('#settingsStatus');
 
-const STORAGE_KEY = 'suno-command-maker-kr-v1.2-settings';
-const SETTINGS_FILE_NAME = 'suno-command-maker-v1.2-settings.json';
+const STORAGE_KEY = 'Music-command-maker-kr-v1.2-settings';
+const SETTINGS_FILE_NAME = 'Music-command-maker-v1.2-settings.json';
 
 const genreGroups = {
   'K-Pop / Pop': ['케이팝', '팝', '댄스팝', '버블검 팝', '버블검 댄스', '버블검 베이스', '하이퍼팝', '얼터너티브 팝', '인디팝', '베드룸 팝', '드림 팝', '어쿠스틱 팝', '싱어송라이터'],
@@ -333,7 +333,7 @@ function lyricRequirement(settings) {
     return [
       '무가사곡으로 작성한다.',
       '실제 가사 문장, 보컬 파트, 언어 지시, 라임 지시, 훅 가사 문장은 만들지 않는다.',
-      'Suno Lyrics에는 [Intro], [Instrumental Break], [Build], [Outro] 같은 구조 태그와 연주 지시만 넣는다.'
+      'Music Lyrics에는 [Intro], [Instrumental Break], [Build], [Outro] 같은 구조 태그와 연주 지시만 넣는다.'
     ].join('\n');
   }
   const densityGuide = {
@@ -346,7 +346,7 @@ function lyricRequirement(settings) {
     densityGuide[settings.density],
     '가사 언어는 ' + languageText(settings) + ' 비중을 지킨다.',
     '보컬 특징은 ' + voiceProfile(settings) + '로 지시한다.',
-    'Suno Lyrics에 바로 붙여 넣기 좋게 [Verse], [Pre-Chorus], [Chorus], [Bridge], [Outro] 섹션 태그를 사용한다.'
+    'Music Lyrics에 바로 붙여 넣기 좋게 [Verse], [Pre-Chorus], [Chorus], [Bridge], [Outro] 섹션 태그를 사용한다.'
   ].join('\n');
 }
 
@@ -355,13 +355,13 @@ function modeRule(settings) {
     return [
       settings.trackCount + '개의 싱글곡 후보를 하나의 패키지로 생성한다.',
       '모든 후보는 같은 목적과 핵심 설정을 공유하되 제목, 훅, 사운드 질감, 편곡 방향은 서로 다르게 만든다.',
-      '각 후보마다 목표 길이 계산표와 Suno용 Weirdness, Style Influence 추천값을 반드시 명시한다.'
+      '각 후보마다 목표 길이 계산표와 Music용 Weirdness, Style Influence 추천값을 반드시 명시한다.'
     ].join('\n');
   }
   return [
     settings.trackCount + '개의 트랙을 하나의 앨범 패키지로 생성한다.',
     '모든 트랙은 기본 설정을 공유하되 트랙별 제목, 훅, 리듬, 감정선, 사운드 질감, 구조 전개가 겹치지 않게 한다.',
-    '각 트랙마다 목표 길이 계산표와 Suno용 Weirdness, Style Influence 추천값을 반드시 명시한다.'
+    '각 트랙마다 목표 길이 계산표와 Music용 Weirdness, Style Influence 추천값을 반드시 명시한다.'
   ].join('\n');
 }
 
@@ -400,10 +400,10 @@ function buildCommand(settings) {
   const formLabel = settings.noLyrics ? '무가사곡' : '가사곡';
   const lyricsBlockLabel = settings.noLyrics ? '무가사 구조 블록박스' : 'Lyrics 블록박스';
   const lyricsBlockContent = settings.noLyrics
-    ? 'Suno Lyrics에 바로 붙여 넣을 구조 태그와 연주 지시'
-    : 'Suno Lyrics에 바로 붙여 넣을 가사';
+    ? 'Music Lyrics에 바로 붙여 넣을 구조 태그와 연주 지시'
+    : 'Music Lyrics에 바로 붙여 넣을 가사';
   const perItem = settings.mode === 'single' ? '각 후보곡마다' : '각 트랙마다';
-  return '아래 설정을 바탕으로 Suno에서 바로 시작할 수 있는 "수노 패키지"를 만들어줘.\n\n'
+  return '아래 설정을 바탕으로 Music에서 바로 시작할 수 있는 "수노 패키지"를 만들어줘.\n\n'
     + '출력은 반드시 다음 항목 순서로 정리해줘.\n'
     + '1. 전체 패키지 콘셉트\n'
     + '2. 곡별 요청사항\n'
@@ -416,9 +416,9 @@ function buildCommand(settings) {
     + '```\n'
     + '- Style Prompt 블록박스\n'
     + '```text\n'
-    + '여기에 Suno Style Prompt에 바로 붙여 넣을 스타일 프롬프트만 작성\n'
+    + '여기에 Music Style Prompt에 바로 붙여 넣을 스타일 프롬프트만 작성\n'
     + '```\n'
-    + '- Suno 설정 추천값\n'
+    + '- Music 설정 추천값\n'
     + '  - Weirdness: 챗봇이 곡 분위기/장르/실험성에 맞게 자율 판단\n'
     + '  - Style Influence: 챗봇이 장르 혼합도/스타일 선명도에 맞게 자율 판단\n'
     + '- 편곡 메모\n'
@@ -452,7 +452,7 @@ function buildCommand(settings) {
     + '\n\n길이 맞춤 지침:\n'
     + durationPlanText(settings)
     + '\n\n마지막 지침:\n'
-    + '- Style Prompt는 Suno가 이해하기 쉬운 음악 제작 키워드 중심으로 작성한다.\n'
+    + '- Style Prompt는 Music가 이해하기 쉬운 음악 제작 키워드 중심으로 작성한다.\n'
     + '- 스타일 프롬프트 언어가 영어이면 Style Prompt 내용은 영어로 작성한다.\n'
     + '- 스타일 프롬프트 언어가 한국어이면 Style Prompt 내용은 한국어로 작성한다.\n'
     + '- 결과는 복사해서 바로 사용할 수 있게 군더더기 없이 작성한다.';
@@ -569,7 +569,7 @@ function setStatus(message) {
 
 function settingsFilePayload() {
   return {
-    app: 'Suno Command Maker KR',
+    app: 'Music Prompt Maker KR',
     version: '1.2',
     savedAt: new Date().toISOString(),
     settings: serializeSettings()
@@ -611,7 +611,7 @@ async function saveSettings(toFile = false) {
     if (window.showSaveFilePicker) {
       const handle = await window.showSaveFilePicker({
         suggestedName: SETTINGS_FILE_NAME,
-        types: [{ description: 'Suno Command Maker 설정 파일', accept: { 'application/json': ['.json'] } }]
+        types: [{ description: 'Music Prompt Maker 설정 파일', accept: { 'application/json': ['.json'] } }]
       });
       const writable = await handle.createWritable();
       await writable.write(blob);
@@ -679,7 +679,7 @@ async function loadSettings(fromFile = false) {
     if (window.showOpenFilePicker) {
       const [handle] = await window.showOpenFilePicker({
         multiple: false,
-        types: [{ description: 'Suno Command Maker 설정 파일', accept: { 'application/json': ['.json'] } }]
+        types: [{ description: 'Music Prompt Maker 설정 파일', accept: { 'application/json': ['.json'] } }]
       });
       const file = await handle.getFile();
       text = await file.text();

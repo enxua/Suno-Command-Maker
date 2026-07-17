@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Suno Command Maker KR v1.2</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f2eeeb'/%3E%3Cpath d='M42 13v27.5a8.5 8.5 0 1 1-5-7.7V20.2l-18 4.2v21.1a8.5 8.5 0 1 1-5-7.7V20l28-7z' fill='%231e1e1e'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Noto+Serif+KR:wght@400;500&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-nav">
+    <a class="app-home-chip" href="./index.html">ENXUA</a>
+    <nav class="app-nav-links" aria-label="사이트 메뉴">
+      <a class="app-nav-btn is-active" href="./index.html" aria-current="page" aria-disabled="true" tabindex="-1">수노 커멘드 메이커</a>
+    </nav>
+  </header>
+  <main class="app-shell">
+    <section class="hero">
+      <p class="hero-eyebrow">ENXUA Music Tools</p>
+      <h1>Suno Command Maker</h1>
+      <p class="hero-sub">수노 패키지 명령어 생성기 · v1.2 · 제작자 ENXUA</p>
+      <div class="hero-rule" aria-hidden="true"><span>♪</span></div>
+    </section>
+    <section class="workspace">
+      <aside class="settings-panel" aria-label="명령어 설정">
+        <form id="promptForm" class="control-grid">
+          <div class="settings-actions" aria-label="설정 저장">
+            <button type="button" id="saveSettings">설정 저장</button>
+            <button type="button" id="loadSettings">불러오기</button>
+            <button type="button" id="resetSettings">초기화</button>
+            <span id="settingsStatus" aria-live="polite"></span>
+          </div>
+          <div class="form-section" aria-hidden="true"><span class="form-section-no">01</span><span class="form-section-title">기본 정보</span></div>
+          <fieldset class="mode-switch" aria-label="생성 분류">
+            <legend>생성 분류</legend>
+            <label>
+              <input type="radio" name="projectMode" value="single" checked>
+              <span>싱글곡</span>
+            </label>
+            <label>
+              <input type="radio" name="projectMode" value="album">
+              <span>앨범</span>
+            </label>
+          </fieldset>
+          <div class="two-col single-only">
+            <label>
+              생성 곡 수
+              <select id="singleCount">
+                <option value="1" selected>1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+            <label>
+              곡 제목
+              <input id="songTitle" value="랜덤" maxlength="80">
+            </label>
+          </div>
+          <div class="two-col album-only is-hidden">
+            <label>
+              트랙 수
+              <select id="trackPreset">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="custom">직접입력</option>
+              </select>
+            </label>
+            <label>
+              직접입력
+              <input id="trackCount" type="number" value="3" min="1" max="30">
+            </label>
+          </div>
+          <label>
+            곡 주제
+            <input id="theme" placeholder="비워두면 용도와 장르에 맞춰 정함" maxlength="120">
+          </label>
+          <div class="two-col">
+            <label>
+              곡의 용도
+              <select id="purpose">
+                <option selected>노래</option>
+                <option>BGM</option>
+                <option>영상음악</option>
+                <option>숏폼/릴스</option>
+                <option>명상음악</option>
+                <option>게임 배경음악</option>
+                <option>광고 음악</option>
+                <option>오프닝 테마</option>
+                <option>엔딩 테마</option>
+                <option>힐링 배경음악</option>
+                <option>카페/매장 음악</option>
+                <option>예배/찬양</option>
+                <option>공연/무대</option>
+              </select>
+            </label>
+            <label>
+              목표 길이
+              <select id="duration">
+                <option value="30">30초</option>
+                <option value="45">45초</option>
+                <option value="60">1분</option>
+                <option value="90">1분 30초</option>
+                <option value="120">2분</option>
+                <option value="150">2분 30초</option>
+                <option value="180" selected>3분</option>
+                <option value="210">3분 30초</option>
+                <option value="240">4분</option>
+                <option value="270">4분 30초</option>
+                <option value="300">5분</option>
+                <option value="330">5분 30초</option>
+                <option value="360">6분</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-section" aria-hidden="true"><span class="form-section-no">02</span><span class="form-section-title">사운드 &amp; 무드</span></div>
+          <section class="blend-panel" aria-label="장르 설정">
+            <div class="two-col">
+              <label>
+                장르 1
+                <input id="genreA" type="hidden" value="케이팝">
+                <button type="button" class="genre-picker-button" data-target="genreA">
+                  <span>케이팝</span>
+                </button>
+              </label>
+              <label>
+                장르 2
+                <input id="genreB" type="hidden" value="없음">
+                <button type="button" class="genre-picker-button" data-target="genreB">
+                  <span>없음</span>
+                </button>
+              </label>
+            </div>
+            <label id="genreMixWrap" class="range-field">
+              <span>장르 비중 <output id="genreMixValue">70 : 30</output></span>
+              <input id="genreMix" type="range" min="50" max="90" value="70" step="5">
+            </label>
+          </section>
+          <div class="two-col">
+            <label>
+              BPM
+              <input id="bpm" value="랜덤" inputmode="numeric">
+            </label>
+            <label>
+              곡 강도
+              <select id="energy">
+                <option selected>랜덤</option>
+                <option>차분</option>
+                <option>보통</option>
+                <option>강함</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-section" aria-hidden="true"><span class="form-section-no">03</span><span class="form-section-title">보컬 &amp; 가사</span></div>
+          <div class="two-col">
+            <label>
+              가사 분량
+              <select id="density">
+                <option value="none">없음</option>
+                <option value="high">고</option>
+                <option value="medium" selected>중</option>
+                <option value="low">저</option>
+              </select>
+            </label>
+            <label>
+              보이스 톤
+              <select id="voiceTone">
+                <option>없음</option>
+                <option selected>밝고 쾌활한</option>
+                <option>감정적으로 솔직한</option>
+                <option>수줍은</option>
+                <option>장난기 넘치는</option>
+                <option>시크하고 쿨한</option>
+                <option>몽환적이고 부드러운</option>
+                <option>따뜻하고 포근한</option>
+                <option>우아하고 차분한</option>
+                <option>허스키한</option>
+                <option>에너지 넘치고 파워풀한</option>
+                <option>맑고 깨끗한</option>
+                <option>섬세하고 속삭이는</option>
+                <option>깊고 성숙한</option>
+                <option>담백하고 자연스러운</option>
+              </select>
+            </label>
+          </div>
+          <div class="two-col">
+            <label>
+              보컬 나이
+              <select id="voiceAge">
+                <option>없음</option>
+                <option>어린이</option>
+                <option selected>청소년</option>
+                <option>성인</option>
+                <option>중년</option>
+              </select>
+            </label>
+            <label>
+              보컬 젠더/구성
+              <select id="voiceGender">
+                <option>없음</option>
+                <option>남자</option>
+                <option selected>여자</option>
+                <option>듀엣</option>
+                <option>합창</option>
+                <option>남녀 듀엣</option>
+                <option>여성 듀엣</option>
+                <option>남성 듀엣</option>
+                <option>혼성 그룹</option>
+              </select>
+            </label>
+          </div>
+          <section class="blend-panel" aria-label="언어 설정">
+            <div class="two-col">
+              <label>
+                언어 1
+                <select id="languageA"></select>
+              </label>
+              <label>
+                언어 2
+                <select id="languageB"></select>
+              </label>
+            </div>
+            <label id="languageMixWrap" class="range-field">
+              <span>언어 비중 <output id="languageMixValue">70 : 30</output></span>
+              <input id="languageMix" type="range" min="50" max="90" value="70" step="5">
+            </label>
+          </section>
+          <div class="form-section" aria-hidden="true"><span class="form-section-no">04</span><span class="form-section-title">구성 &amp; 디테일</span></div>
+          <div class="two-col">
+            <label>
+              분위기
+              <select id="mood">
+                <option selected>랜덤</option>
+                <option>몽환적</option>
+                <option>감성적</option>
+                <option>밝고 청량함</option>
+                <option>어둡고 강렬함</option>
+                <option>시네마틱</option>
+                <option>레트로</option>
+                <option>웅장함</option>
+                <option>경건함</option>
+              </select>
+            </label>
+            <label>
+              곡 구성
+              <select id="structure">
+                <option selected>랜덤</option>
+                <option>인트로-벌스-프리코러스-후렴-브릿지-마지막 후렴</option>
+                <option>벌스-프리코러스-후렴-벌스-후렴-아웃트로</option>
+                <option>짧은 벌스-훅-브릿지-훅</option>
+                <option>인트로-빌드업-드롭-브레이크-드롭-아웃트로</option>
+                <option>앰비언트 인트로-테마 A-테마 B-잔향 아웃트로</option>
+                <option>전주-1절-후렴-2절-후렴-간주-마지막 후렴</option>
+              </select>
+            </label>
+          </div>
+          <div class="two-col">
+            <label>
+              훅 가사
+              <input id="hookLyric" value="랜덤" maxlength="120">
+            </label>
+            <label>
+              애드립/추임새
+              <input id="adlib" value="랜덤" maxlength="80">
+            </label>
+          </div>
+          <div class="two-col">
+            <label>
+              훅 강조
+              <select id="hook">
+                <option>없음</option>
+                <option selected>중간</option>
+                <option>강함</option>
+              </select>
+            </label>
+            <label>
+              라임/반복
+              <select id="rhyme">
+                <option selected>랜덤</option>
+                <option>자연스러운 라임</option>
+                <option>후렴 반복 강조</option>
+                <option>끝 라임 촘촘하게</option>
+                <option>미니멀한 반복</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            원하지 않는 요소
+            <input id="avoid" placeholder="비워두면 별도 제한 없음" maxlength="120">
+          </label>
+          <label>
+            스타일 프롬프트 언어
+            <select id="promptLanguage">
+              <option selected>영어</option>
+              <option>한국어</option>
+            </select>
+          </label>
+          <label>
+            추가 요청사항
+            <textarea id="extraRequest" placeholder="없음" maxlength="800" rows="5"></textarea>
+          </label>
+        </form>
+      </aside>
+      <section class="output-panel">
+        <div class="output-toolbar">
+          <div>
+            <p class="output-eyebrow">Generated Command</p>
+            <h2>챗봇 명령어</h2>
+            <p id="summary">설정값으로 수노 패키지 생성 명령어를 만듭니다.</p>
+          </div>
+        </div>
+        <div id="results" class="results" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <span class="footer-mark">ENXUA</span>
+    <span class="footer-sub">Suno Command Maker · 수노 패키지 명령어 생성기</span>
+  </footer>
+  <template id="trackTemplate">
+    <article class="track-card">
+      <div class="track-head">
+        <div>
+          <span class="track-label"></span>
+          <h3></h3>
+          <p class="track-help">아래 명령어를 ChatGPT, Gemini, Claude 등에 붙여 넣으세요.</p>
+        </div>
+        <button type="button" class="copy-track">복사</button>
+      </div>
+      <div class="prompt-block">
+        <h4>Chatbot Command</h4>
+        <pre class="command-output"></pre>
+      </div>
+    </article>
+  </template>
+  <div class="genre-modal" id="genreModal" hidden>
+    <div class="genre-modal-panel" role="dialog" aria-modal="true" aria-labelledby="genreModalTitle">
+      <div class="genre-modal-head">
+        <div>
+          <p>Genre Library</p>
+          <h2 id="genreModalTitle">장르 선택</h2>
+        </div>
+        <button type="button" id="genreModalClose" aria-label="닫기">닫기</button>
+      </div>
+      <div class="genre-modal-search">
+        <input id="genreSearch" type="search" placeholder="장르 검색">
+      </div>
+      <div class="genre-group-list" id="genreGroupList"></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
